@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aa819c02-b06c-4866-a0ac-65bbf2016948" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" show_ignored="true" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;gilangrdhi&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/gilangrdhi/pemdasStudyCase.git&quot;,
+    &quot;accountId&quot;: &quot;b4ede0ae-9547-4867-9fc2-a33b235ee057&quot;
+  }
+}</component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.3539220356318928" />
+      <entry key="MS500" value="3.4973108345157966" />
+      <entry key="S2" value="5.6907974739171046" />
+      <entry key="S5" value="6.425085007629591" />
+      <entry key="S10" value="6.703147772853679" />
+      <entry key="S30" value="6.898874947060553" />
+      <entry key="S60" value="6.949171078315097" />
+      <entry key="M2" value="6.996756446125966" />
+      <entry key="M5" value="9.204071535211352" />
+      <entry key="M10" value="17.752842781430644" />
+      <entry key="M15" value="25.50465311234411" />
+      <entry key="M30" value="39.22825319233845" />
+      <entry key="H1" value="49.768284939658024" />
+      <entry key="H2" value="56.34602365809328" />
+      <entry key="H4" value="60.02740391195394" />
+      <entry key="D1" value="63.31665717826311" />
+      <entry key="W1" value="63.90184546889517" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="4.4593538862023855E-197" />
+      <entry key="S5" value="2.882732184936063E-79" />
+      <entry key="S10" value="5.4481403898935236E-40" />
+      <entry key="S30" value="1.0124247745631102E-13" />
+      <entry key="S60" value="4.263958726789137E-7" />
+      <entry key="M2" value="9.098465484998501E-4" />
+      <entry key="M5" value="0.09175158611068142" />
+      <entry key="M10" value="0.4281094063848166" />
+      <entry key="M15" value="0.7155727305551164" />
+      <entry key="M30" value="1.1962230931332563" />
+      <entry key="H1" value="1.546726981084113" />
+      <entry key="H2" value="1.7588142336760524" />
+      <entry key="H4" value="1.875532177022262" />
+      <entry key="D1" value="1.9786957386787674" />
+      <entry key="W1" value="1.9969425404867243" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.2970777290444266" />
+      <entry key="MS500" value="3.429979593083572" />
+      <entry key="S2" value="5.661981904556798" />
+      <entry key="S5" value="6.412144437974947" />
+      <entry key="S10" value="6.696418586432485" />
+      <entry key="S30" value="6.896572014400689" />
+      <entry key="S60" value="6.948012392703301" />
+      <entry key="M2" value="6.997074014519488" />
+      <entry key="M5" value="9.295088307768376" />
+      <entry key="M10" value="18.1793181401675" />
+      <entry key="M15" value="26.218210760837486" />
+      <entry key="M30" value="40.42252921862435" />
+      <entry key="H1" value="51.31363907941553" />
+      <entry key="H2" value="58.10402011143739" />
+      <entry key="H4" value="61.90248944018212" />
+      <entry key="D1" value="65.29527275874266" />
+      <entry key="W1" value="65.89877641163974" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3MK4Ut9mrPAm5fSYsRQe26nhw10" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "fitur-cek-tanggal",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/LSP-P1UM/IdeaProjects/sistem-reservasi-hotel/src/Main.java",
+    "python.packages.toolwindow.project.migrated.to.right.top.v2": "true",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\LSP-P1UM\IdeaProjects\sistem-reservasi-hotel" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-ac68fc9d2b05-intellij.indexing.shared.core-IU-263.7307.200" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa819c02-b06c-4866-a0ac-65bbf2016948" name="Changes" comment="" />
+      <created>1795085971121</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1795085971121</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="setup" />
+    <MESSAGE value="Implementasi fitur individu" />
+    <MESSAGE value="Berhenti melacak folder .idea" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+</project>
