@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa819c02-b06c-4866-a0ac-65bbf2016948" name="Changes" comment="" />
+    <list default="true" id="aa819c02-b06c-4866-a0ac-65bbf2016948" name="Changes" comment="Implementasi fitur individu" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,61 +35,61 @@
 }</component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0034242410988907" />
-      <entry key="MS500" value="1.321528578215448" />
-      <entry key="S2" value="2.285018788903872" />
-      <entry key="S5" value="4.8562760742997" />
-      <entry key="S10" value="7.342056360896934" />
-      <entry key="S30" value="10.106386566727814" />
-      <entry key="S60" value="11.002135164470753" />
-      <entry key="M2" value="11.487561854963017" />
-      <entry key="M5" value="11.791683270424533" />
-      <entry key="M10" value="11.895276153659484" />
-      <entry key="M15" value="11.930057796753404" />
-      <entry key="M30" value="11.964965583943222" />
-      <entry key="H1" value="11.982466932988707" />
-      <entry key="H2" value="11.991229497945113" />
-      <entry key="H4" value="11.995613756359388" />
-      <entry key="D1" value="11.999268821489881" />
-      <entry key="W1" value="11.999895542549375" />
+      <entry key="MS100" value="1.000000000000814" />
+      <entry key="MS500" value="1.0116846774747852" />
+      <entry key="S2" value="2.989222219878978" />
+      <entry key="S5" value="10.026896264582247" />
+      <entry key="S10" value="18.85341571656123" />
+      <entry key="S30" value="32.38489948865411" />
+      <entry key="S60" value="37.93207920652237" />
+      <entry key="M2" value="41.30973904039043" />
+      <entry key="M5" value="44.952322664942784" />
+      <entry key="M10" value="48.47178175473473" />
+      <entry key="M15" value="50.48943195887041" />
+      <entry key="M30" value="53.23282559850343" />
+      <entry key="H1" value="54.965525327569544" />
+      <entry key="H2" value="55.941725816646574" />
+      <entry key="H4" value="56.460157387203" />
+      <entry key="D1" value="56.90849988531628" />
+      <entry key="W1" value="56.98689064944668" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="0.0" />
-      <entry key="S60" value="0.0" />
-      <entry key="M2" value="0.0" />
-      <entry key="M5" value="0.0" />
-      <entry key="M10" value="0.0" />
-      <entry key="M15" value="0.0" />
-      <entry key="M30" value="0.0" />
-      <entry key="H1" value="0.0" />
-      <entry key="H2" value="0.0" />
-      <entry key="H4" value="0.0" />
-      <entry key="D1" value="0.0" />
-      <entry key="W1" value="0.0" />
+      <entry key="MS100" value="3.481334582117993E-5" />
+      <entry key="MS500" value="0.1283361932149999" />
+      <entry key="S2" value="0.5985318814461411" />
+      <entry key="S5" value="0.8145737992602559" />
+      <entry key="S10" value="0.9158226075858994" />
+      <entry key="S30" value="1.2037892315125986" />
+      <entry key="S60" value="1.470302979336616" />
+      <entry key="M2" value="1.6895267583536626" />
+      <entry key="M5" value="1.8626546873286836" />
+      <entry key="M10" value="1.9289197274139926" />
+      <entry key="M15" value="1.9520609403078857" />
+      <entry key="M30" value="1.9757499383606714" />
+      <entry key="H1" value="1.9878039938406784" />
+      <entry key="H2" value="1.993884146679201" />
+      <entry key="H4" value="1.9969375974087076" />
+      <entry key="D1" value="1.9994889767729376" />
+      <entry key="W1" value="1.9999269814148597" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.07129773224177646" />
-      <entry key="MS500" value="0.5900600229635512" />
-      <entry key="S2" value="1.514365190470872" />
-      <entry key="S5" value="4.313010949924704" />
-      <entry key="S10" value="7.001506559244106" />
-      <entry key="S30" value="9.972703190061852" />
-      <entry key="S60" value="10.932380491786798" />
-      <entry key="M2" value="11.45192257464437" />
-      <entry key="M5" value="11.777240172971311" />
-      <entry key="M10" value="11.888022988519257" />
-      <entry key="M15" value="11.925215298572429" />
-      <entry key="M30" value="11.962540800222746" />
-      <entry key="H1" value="11.981253656108052" />
-      <entry key="H2" value="11.990622638079051" />
-      <entry key="H4" value="11.995310271048586" />
-      <entry key="D1" value="11.999218232911579" />
-      <entry key="W1" value="11.999888315421188" />
+      <entry key="MS100" value="0.04575267805045553" />
+      <entry key="MS500" value="0.5598158488477132" />
+      <entry key="S2" value="3.1431604958987207" />
+      <entry key="S5" value="10.574565044706361" />
+      <entry key="S10" value="19.608741370393027" />
+      <entry key="S30" value="33.52189782946606" />
+      <entry key="S60" value="39.36529198727068" />
+      <entry key="M2" value="42.97919738960802" />
+      <entry key="M5" value="46.804791033198136" />
+      <entry key="M10" value="50.39386437514623" />
+      <entry key="M15" value="52.43620792138955" />
+      <entry key="M30" value="55.20542387490908" />
+      <entry key="H1" value="56.951589979118936" />
+      <entry key="H2" value="57.93469390686251" />
+      <entry key="H4" value="58.456624599927196" />
+      <entry key="D1" value="58.90790868033021" />
+      <entry key="W1" value="58.986806131713166" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -107,7 +107,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "fitur-cek-tanggal",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.jshint": "true",
@@ -148,6 +148,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="setup" />
+    <MESSAGE value="Implementasi fitur individu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementasi fitur individu" />
   </component>
 </project>
