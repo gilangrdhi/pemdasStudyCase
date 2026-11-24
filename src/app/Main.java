@@ -159,7 +159,6 @@ public class Main {
         }
     }
 
-    // [Titik Integrasi Anggota 4 - Cek Ketersediaan Tanggal]
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
         return kamar.isTersedia();
     }
