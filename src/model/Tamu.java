@@ -16,7 +16,7 @@ public class Tamu {
     }
 
     public void setIdTamu(String idTamu) {
-        if (idTamu == null || idTamu.trim().isEmpty()) {
+        if (idTamu == null || idTamu.trim().equals("")) {
             throw new IllegalArgumentException("ID Tamu tidak boleh kosong.");
         }
         this.idTamu = idTamu.trim();
@@ -27,7 +27,7 @@ public class Tamu {
     }
 
     public void setNama(String nama) {
-        if (nama == null || nama.trim().isEmpty()) {
+        if (nama == null || nama.trim().equals("")) {
             throw new IllegalArgumentException("Nama tamu tidak boleh kosong.");
         }
         this.nama = nama.trim();
@@ -38,7 +38,7 @@ public class Tamu {
     }
 
     public void setNoTelepon(String noTelepon) {
-        if (noTelepon == null || noTelepon.trim().isEmpty()) {
+        if (noTelepon == null || noTelepon.trim().equals("")) {
             throw new IllegalArgumentException("Nomor telepon tidak boleh kosong.");
         }
         this.noTelepon = noTelepon.trim();
@@ -46,6 +46,6 @@ public class Tamu {
 
     @Override
     public String toString() {
-        return String.format("%s (%s) - Telp: %s", nama, idTamu, noTelepon);
+        return nama + " (" + idTamu + ") - Telp: " + noTelepon;
     }
 }
