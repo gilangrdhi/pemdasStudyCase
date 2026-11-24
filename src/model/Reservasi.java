@@ -12,14 +12,13 @@ public class Reservasi {
     private String status;
     private double totalBiaya;
 
-    // [Bagian Kamu - Anggota 2] Atribut diskon lama menginap
+    // [Bagian Anggota 2] Atribut diskon lama menginap
     private int minimalMalamDiskon = 3;
     private double persentaseDiskon = 0.10; // 10%
 
+    // [Bagian Meyzaffa & Fitri] Atribut deposit & tanggal pembatalan
     private double deposit;
     private LocalDate tanggalBatal;
-    // Tambahkan atribut: private double deposit; beserta getter & setter-nya di
-    // bawah
 
     public Reservasi(String kodeReservasi, Kamar kamar, Tamu tamu, int jumlahTamu,
             LocalDate tanggalCheckIn, LocalDate tanggalCheckOut) {
@@ -28,12 +27,6 @@ public class Reservasi {
         }
         if (kamar == null || tamu == null) {
             throw new IllegalArgumentException("Data kamar dan tamu wajib diisi.");
-        }
-        // Catatan untuk yang mengerjakan Cek Tanggal: bagian if (!kamar.isTersedia())
-        // ini
-        // boleh dihapus/disesuaikan nanti jika pengecekan sudah memakai rentang tanggal
-        if (!kamar.isTersedia()) {
-            throw new IllegalArgumentException("Kamar " + kamar.getNomorKamar() + " sedang tidak tersedia.");
         }
         if (jumlahTamu <= 0 || jumlahTamu > kamar.getKapasitas()) {
             throw new IllegalArgumentException("Jumlah tamu harus antara 1 hingga " + kamar.getKapasitas() + " orang.");
@@ -49,7 +42,6 @@ public class Reservasi {
         this.tanggalCheckIn = tanggalCheckIn;
         this.tanggalCheckOut = tanggalCheckOut;
         this.status = "DIPESAN";
-        this.kamar.setTersedia(false);
         this.totalBiaya = hitungTotalBiaya();
     }
 
@@ -65,15 +57,12 @@ public class Reservasi {
     }
 
     // TODO [Farid - Anggota 1 (fitur-tarif-weekend)]:
-    // Ubah isi method hitungSubtotalKamar() ini.
-    // Gunakan perulangan tanggal dari tanggalCheckIn ke tanggalCheckOut, lalu cek
-    // harinya
-    // (DayOfWeek.FRIDAY / SATURDAY / SUNDAY) untuk menerapkan tarif akhir pekan.
+    // Ubah isi method hitungSubtotalKamar() ini untuk tarif akhir pekan
     public double hitungSubtotalKamar() {
         return hitungLamaMenginap() * kamar.getHargaPerMalam();
     }
 
-    // [Bagian Kamu - Anggota 2] Menghitung nominal potongan diskon menginap
+    // [Bagian Anggota 2] Menghitung nominal potongan diskon menginap
     public double hitungDiskonMenginap(double subtotal) {
         if (hitungLamaMenginap() >= minimalMalamDiskon) {
             return subtotal * persentaseDiskon;
@@ -81,8 +70,6 @@ public class Reservasi {
         return 0;
     }
 
-    // Menggabungkan hasil hitungSubtotalKamar() (Farid) & hitungDiskonMenginap()
-    // (Kamu)
     public double hitungTotalBiaya() {
         double subtotal = hitungSubtotalKamar();
         double diskon = hitungDiskonMenginap(subtotal);
@@ -95,6 +82,7 @@ public class Reservasi {
             throw new IllegalStateException("Check-in gagal. Status reservasi saat ini: " + this.status);
         }
         this.status = "CHECK_IN";
+        this.kamar.setTersedia(false);
     }
 
     public void checkOut() {
@@ -106,10 +94,13 @@ public class Reservasi {
         hitungTotalBiaya();
     }
 
-    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan (fitur-deposit-batal)]:
+    // [Bagian Meyzaffa & Fitri] Pembatalan reservasi & perhitungan refund deposit
     public void batalkanReservasi(LocalDate tanggalPembatalan) {
         if (!this.status.equals("DIPESAN")) {
             throw new IllegalStateException("Pembatalan gagal. Status reservasi saat ini: " + this.status);
+        }
+        if (tanggalPembatalan == null) {
+            throw new IllegalArgumentException("Tanggal pembatalan tidak boleh kosong.");
         }
         this.status = "DIBATALKAN";
         this.tanggalBatal = tanggalPembatalan;
@@ -120,22 +111,22 @@ public class Reservasi {
         if (!this.status.equals("DIBATALKAN")) {
             throw new IllegalStateException("Refund hanya bisa dihitung untuk reservasi yang dibatalkan.");
         }
+        // Batal minimal H-3 check-in: refund 100%, kurang dari H-3: refund 50%
         if (!tanggalBatal.isAfter(tanggalCheckIn.minusDays(3))) {
             return deposit;
         }
         return deposit * 0.5;
     }
-    // Buat method batalkanReservasi() dan hitungRefund() di sini
 
-    // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+    // [Bagian Meyzaffa & Fitri] Cek apakah rentang tanggal baru bentrok dengan
+    // reservasi ini
     public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
-        if (this.status.equals("DIBATALKAN")) {
+        if (this.status.equals("DIBATALKAN") || this.status.equals("CHECK_OUT")) {
             return false;
         }
         return masukBaru.isBefore(tanggalCheckOut) && keluarBaru.isAfter(tanggalCheckIn);
     }
-    // Buat method isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) di
-    // sini
+
     public double getDeposit() {
         return deposit;
     }
@@ -146,6 +137,11 @@ public class Reservasi {
         }
         this.deposit = deposit;
     }
+
+    public LocalDate getTanggalBatal() {
+        return tanggalBatal;
+    }
+
     public int getMinimalMalamDiskon() {
         return minimalMalamDiskon;
     }
@@ -208,6 +204,7 @@ public class Reservasi {
                 + " | Kamar: " + kamar.getNomorKamar()
                 + " | " + tanggalCheckIn + " s/d " + tanggalCheckOut
                 + " (" + hitungLamaMenginap() + " malam)"
+                + " | Deposit: Rp " + (long) deposit
                 + " | Diskon: Rp " + (long) diskon
                 + " | Status: " + status
                 + " | Total: Rp " + (long) hitungTotalBiaya();
