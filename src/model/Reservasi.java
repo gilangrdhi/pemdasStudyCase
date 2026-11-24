@@ -1,5 +1,6 @@
 package model;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class Reservasi {
@@ -12,8 +13,13 @@ public class Reservasi {
     private String status;
     private double totalBiaya;
 
+    private double persentaseTarifWeekend = 0.20;
+
     private int minimalMalamDiskon = 3;
     private double persentaseDiskon = 0.10;
+
+    private double deposit;
+    private LocalDate tanggalBatal;
 
     public Reservasi(String kodeReservasi, Kamar kamar, Tamu tamu, int jumlahTamu,
             LocalDate tanggalCheckIn, LocalDate tanggalCheckOut) {
@@ -50,8 +56,35 @@ public class Reservasi {
         return jumlahMalam;
     }
 
+    public long hitungJumlahMalamWeekend() {
+        long malamWeekend = 0;
+        LocalDate tanggalSekarang = tanggalCheckIn;
+        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
+            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
+            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
+                malamWeekend++;
+            }
+            tanggalSekarang = tanggalSekarang.plusDays(1);
+        }
+        return malamWeekend;
+    }
+
     public double hitungSubtotalKamar() {
-        return hitungLamaMenginap() * kamar.getHargaPerMalam();
+        double totalSubtotal = 0;
+        LocalDate tanggalSekarang = tanggalCheckIn;
+        double hargaNormal = kamar.getHargaPerMalam();
+
+        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
+            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
+            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
+                double hargaWeekend = hargaNormal + (hargaNormal * persentaseTarifWeekend);
+                totalSubtotal = totalSubtotal + hargaWeekend;
+            } else {
+                totalSubtotal = totalSubtotal + hargaNormal;
+            }
+            tanggalSekarang = tanggalSekarang.plusDays(1);
+        }
+        return totalSubtotal;
     }
 
     public double hitungDiskonMenginap(double subtotal) {
@@ -85,6 +118,28 @@ public class Reservasi {
         hitungTotalBiaya();
     }
 
+    public void batalkanReservasi(LocalDate tanggalPembatalan) {
+        if (!this.status.equals("DIPESAN")) {
+            throw new IllegalStateException("Pembatalan gagal. Status reservasi saat ini: " + this.status);
+        }
+        if (tanggalPembatalan == null) {
+            throw new IllegalArgumentException("Tanggal pembatalan tidak boleh kosong.");
+        }
+        this.status = "DIBATALKAN";
+        this.tanggalBatal = tanggalPembatalan;
+        this.kamar.setTersedia(true);
+    }
+
+    public double hitungRefund() {
+        if (!this.status.equals("DIBATALKAN")) {
+            throw new IllegalStateException("Refund hanya bisa dihitung untuk reservasi yang dibatalkan.");
+        }
+        if (!tanggalBatal.isAfter(tanggalCheckIn.minusDays(3))) {
+            return deposit;
+        }
+        return deposit * 0.5;
+    }
+
     public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
         if (this.status.equals("DIBATALKAN") || this.status.equals("CHECK_OUT")) {
             return false;
@@ -93,6 +148,32 @@ public class Reservasi {
             return true;
         }
         return false;
+    }
+
+    public double getPersentaseTarifWeekend() {
+        return persentaseTarifWeekend;
+    }
+
+    public void setPersentaseTarifWeekend(double persentaseTarifWeekend) {
+        if (persentaseTarifWeekend < 0) {
+            throw new IllegalArgumentException("Persentase tarif weekend tidak boleh negatif.");
+        }
+        this.persentaseTarifWeekend = persentaseTarifWeekend;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(double deposit) {
+        if (deposit < 0) {
+            throw new IllegalArgumentException("Deposit tidak boleh negatif.");
+        }
+        this.deposit = deposit;
+    }
+
+    public LocalDate getTanggalBatal() {
+        return tanggalBatal;
     }
 
     public int getMinimalMalamDiskon() {
@@ -157,6 +238,7 @@ public class Reservasi {
                 + " | Kamar: " + kamar.getNomorKamar()
                 + " | " + tanggalCheckIn + " s/d " + tanggalCheckOut
                 + " (" + hitungLamaMenginap() + " malam)"
+                + " | Deposit: Rp " + (long) deposit
                 + " | Diskon: Rp " + (long) diskon
                 + " | Status: " + status
                 + " | Total: Rp " + (long) hitungTotalBiaya();
