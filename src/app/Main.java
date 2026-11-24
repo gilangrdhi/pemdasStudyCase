@@ -36,7 +36,7 @@ public class Main {
             } else if (pilihan.equals("7")) {
                 tampilkanSemuaReservasi();
             } else if (pilihan.equals("8")) {
-                prosesPembatalanReservasi(); // Slot khusus fitur Deposit & Pembatalan
+                prosesPembatalanReservasi();
             } else if (pilihan.equals("0")) {
                 jalan = false;
                 System.out.println("Program selesai. Terima kasih!");
@@ -143,21 +143,39 @@ public class Main {
             System.out.print("Tanggal Check-Out (YYYY-MM-DD): ");
             LocalDate checkOut = LocalDate.parse(input.nextLine());
 
-            // Memanggil pengecekan ketersediaan tanggal (Bagian Cek Tanggal)
+            // [Bagian Meyzaffa & Fitri] Cek bentrok tanggal pada kamar yang dipilih
             if (!isKamarTersediaPadaTanggal(kamar, checkIn, checkOut)) {
-                System.out.println("Reservasi ditolak: Kamar tidak tersedia pada tanggal tersebut.");
+                System.out.println("Reservasi ditolak: Kamar sudah dipesan pada rentang tanggal tersebut.");
                 return;
             }
-            // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan]:
-             
-            // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
-            
-                
-    // Ubah isi method ini untuk mengecek daftarReservasi agar kamar yang sama
-    // tidak bentrok tanggalnya dengan reservasi yang statusnya masih DIPESAN atau
-    // CHECK_IN
+
+            // [Bagian Meyzaffa & Fitri] Input nominal deposit saat reservasi
+            System.out.print("Nominal Deposit (Rp): ");
+            double deposit = Double.parseDouble(input.nextLine());
+
+            String kodeRes = "RSV-" + (daftarReservasi.size() + 1);
+            Reservasi reservasi = new Reservasi(kodeRes, kamar, tamu, jumlahTamu, checkIn, checkOut);
+            reservasi.setDeposit(deposit);
+            daftarReservasi.add(reservasi);
+
+            System.out.println("\nReservasi berhasil dibuat!");
+            cetakRincianBiaya(reservasi);
+        } catch (Exception e) {
+            System.out.println("Reservasi gagal: " + e.getMessage());
+        }
+    }
+
+    // [Bagian Meyzaffa & Fitri] Mengecek semua reservasi aktif agar tanggal tidak
+    // bentrok
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
-        return kamar.isTersedia();
+        for (Reservasi r : daftarReservasi) {
+            if (r.getKamar().getNomorKamar().equalsIgnoreCase(kamar.getNomorKamar())) {
+                if (r.isTanggalBentrok(checkIn, checkOut)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     static void prosesCheckIn() {
@@ -197,9 +215,7 @@ public class Main {
         }
     }
 
-    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan (fitur-deposit-batal)]:
-    // Panggil method r.batalkanReservasi() dan tampilkan nominal refund deposit di
-    // sini
+    // [Bagian Meyzaffa & Fitri] Proses pembatalan reservasi & hitung refund deposit
     static void prosesPembatalanReservasi() {
         System.out.print("Masukkan Kode Reservasi yang ingin dibatalkan: ");
         String kode = input.nextLine();
@@ -209,15 +225,32 @@ public class Main {
             System.out.println("Kode reservasi tidak ditemukan.");
             return;
         }
-        System.out.println("Fitur pembatalan sedang dikerjakan.");
+
+        try {
+            System.out.print("Tanggal Pembatalan (YYYY-MM-DD): ");
+            LocalDate tglBatal = LocalDate.parse(input.nextLine());
+
+            r.batalkanReservasi(tglBatal);
+            double refund = r.hitungRefund();
+
+            System.out.println("\nReservasi " + r.getKodeReservasi() + " berhasil dibatalkan.");
+            System.out.println("Deposit Awal : Rp " + (long) r.getDeposit());
+            System.out.println("Dana Refund  : Rp " + (long) refund);
+        } catch (Exception e) {
+            System.out.println("Pembatalan gagal: " + e.getMessage());
+        }
     }
 
-    // [Bagian Kamu - Anggota 2] Menampilkan rincian biaya & diskon lama menginap
+    // [Bagian Anggota 2] Menampilkan rincian biaya, diskon, dan deposit
     static void cetakRincianBiaya(Reservasi r) {
         long malam = r.hitungLamaMenginap();
         double subtotal = r.hitungSubtotalKamar();
         double diskon = r.hitungDiskonMenginap(subtotal);
         int persen = (int) (r.getPersentaseDiskon() * 100);
+        double sisaBayar = r.getTotalBiaya() - r.getDeposit();
+        if (sisaBayar < 0) {
+            sisaBayar = 0;
+        }
 
         System.out.println("--- RINCIAN BIAYA (" + r.getKodeReservasi() + ") ---");
         System.out.println("Lama Menginap : " + malam + " malam (" + r.getTanggalCheckIn() + " s/d "
@@ -230,6 +263,8 @@ public class Main {
             System.out.println("Diskon        : Rp 0");
         }
         System.out.println("Total Tagihan : Rp " + (long) r.getTotalBiaya());
+        System.out.println("Deposit       : Rp " + (long) r.getDeposit());
+        System.out.println("Sisa Bayar    : Rp " + (long) sisaBayar);
     }
 
     static void tampilkanSemuaReservasi() {
