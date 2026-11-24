@@ -148,22 +148,11 @@ public class Main {
                 System.out.println("Reservasi ditolak: Kamar tidak tersedia pada tanggal tersebut.");
                 return;
             }
-
             // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan]:
-            // Tambahkan input nominal deposit di sini lalu simpan ke objek reservasi
-
-            String kodeRes = "RSV-" + (daftarReservasi.size() + 1);
-            Reservasi reservasi = new Reservasi(kodeRes, kamar, tamu, jumlahTamu, checkIn, checkOut);
-            daftarReservasi.add(reservasi);
-
-            System.out.println("\nReservasi berhasil dibuat!");
-            cetakRincianBiaya(reservasi);
-        } catch (Exception e) {
-            System.out.println("Reservasi gagal: " + e.getMessage());
-        }
-    }
-
-    // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+             
+            // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+            
+                
     // Ubah isi method ini untuk mengecek daftarReservasi agar kamar yang sama
     // tidak bentrok tanggalnya dengan reservasi yang statusnya masih DIPESAN atau
     // CHECK_IN
