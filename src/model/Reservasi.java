@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class Reservasi {
     private String kodeReservasi;
@@ -13,17 +12,25 @@ public class Reservasi {
     private String status;
     private double totalBiaya;
 
+    // [Bagian Kamu - Anggota 2] Atribut diskon lama menginap
     private int minimalMalamDiskon = 3;
-    private double persentaseDiskon = 0.10;
+    private double persentaseDiskon = 0.10; // 10%
+
+    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan]:
+    // Tambahkan atribut: private double deposit; beserta getter & setter-nya di
+    // bawah
 
     public Reservasi(String kodeReservasi, Kamar kamar, Tamu tamu, int jumlahTamu,
             LocalDate tanggalCheckIn, LocalDate tanggalCheckOut) {
-        if (kodeReservasi == null || kodeReservasi.trim().isEmpty()) {
+        if (kodeReservasi == null || kodeReservasi.trim().equals("")) {
             throw new IllegalArgumentException("Kode reservasi tidak boleh kosong.");
         }
         if (kamar == null || tamu == null) {
             throw new IllegalArgumentException("Data kamar dan tamu wajib diisi.");
         }
+        // Catatan untuk yang mengerjakan Cek Tanggal: bagian if (!kamar.isTersedia())
+        // ini
+        // boleh dihapus/disesuaikan nanti jika pengecekan sudah memakai rentang tanggal
         if (!kamar.isTersedia()) {
             throw new IllegalArgumentException("Kamar " + kamar.getNomorKamar() + " sedang tidak tersedia.");
         }
@@ -45,14 +52,27 @@ public class Reservasi {
         this.totalBiaya = hitungTotalBiaya();
     }
 
+    // Menghitung jumlah malam dengan perulangan tanggal sederhana
     public long hitungLamaMenginap() {
-        return ChronoUnit.DAYS.between(tanggalCheckIn, tanggalCheckOut);
+        long jumlahMalam = 0;
+        LocalDate tanggalSekarang = tanggalCheckIn;
+        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
+            jumlahMalam++;
+            tanggalSekarang = tanggalSekarang.plusDays(1);
+        }
+        return jumlahMalam;
     }
 
+    // TODO [Farid - Anggota 1 (fitur-tarif-weekend)]:
+    // Ubah isi method hitungSubtotalKamar() ini.
+    // Gunakan perulangan tanggal dari tanggalCheckIn ke tanggalCheckOut, lalu cek
+    // harinya
+    // (DayOfWeek.FRIDAY / SATURDAY / SUNDAY) untuk menerapkan tarif akhir pekan.
     public double hitungSubtotalKamar() {
         return hitungLamaMenginap() * kamar.getHargaPerMalam();
     }
 
+    // [Bagian Kamu - Anggota 2] Menghitung nominal potongan diskon menginap
     public double hitungDiskonMenginap(double subtotal) {
         if (hitungLamaMenginap() >= minimalMalamDiskon) {
             return subtotal * persentaseDiskon;
@@ -60,6 +80,8 @@ public class Reservasi {
         return 0;
     }
 
+    // Menggabungkan hasil hitungSubtotalKamar() (Farid) & hitungDiskonMenginap()
+    // (Kamu)
     public double hitungTotalBiaya() {
         double subtotal = hitungSubtotalKamar();
         double diskon = hitungDiskonMenginap(subtotal);
@@ -68,20 +90,27 @@ public class Reservasi {
     }
 
     public void checkIn() {
-        if (!"DIPESAN".equals(this.status)) {
+        if (!this.status.equals("DIPESAN")) {
             throw new IllegalStateException("Check-in gagal. Status reservasi saat ini: " + this.status);
         }
         this.status = "CHECK_IN";
     }
 
     public void checkOut() {
-        if (!"CHECK_IN".equals(this.status)) {
+        if (!this.status.equals("CHECK_IN")) {
             throw new IllegalStateException("Check-out gagal. Tamu harus berstatus CHECK_IN terlebih dahulu.");
         }
         this.status = "CHECK_OUT";
         this.kamar.setTersedia(true);
         hitungTotalBiaya();
     }
+
+    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan (fitur-deposit-batal)]:
+    // Buat method batalkanReservasi() dan hitungRefund() di sini
+
+    // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+    // Buat method isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) di
+    // sini
 
     public int getMinimalMalamDiskon() {
         return minimalMalamDiskon;
@@ -141,9 +170,12 @@ public class Reservasi {
     public String toString() {
         double subtotal = hitungSubtotalKamar();
         double diskon = hitungDiskonMenginap(subtotal);
-        return String.format(
-                "[%s] Tamu: %s | Kamar: %s | %s s/d %s (%d malam) | Diskon: Rp%.0f | Status: %s | Total: Rp%.0f",
-                kodeReservasi, tamu.getNama(), kamar.getNomorKamar(),
-                tanggalCheckIn, tanggalCheckOut, hitungLamaMenginap(), diskon, status, hitungTotalBiaya());
+        return "[" + kodeReservasi + "] Tamu: " + tamu.getNama()
+                + " | Kamar: " + kamar.getNomorKamar()
+                + " | " + tanggalCheckIn + " s/d " + tanggalCheckOut
+                + " (" + hitungLamaMenginap() + " malam)"
+                + " | Diskon: Rp " + (long) diskon
+                + " | Status: " + status
+                + " | Total: Rp " + (long) hitungTotalBiaya();
     }
 }

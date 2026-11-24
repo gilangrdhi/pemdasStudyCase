@@ -20,7 +20,7 @@ public class Kamar {
     }
 
     public void setNomorKamar(String nomorKamar) {
-        if (nomorKamar == null || nomorKamar.trim().isEmpty()) {
+        if (nomorKamar == null || nomorKamar.trim().equals("")) {
             throw new IllegalArgumentException("Nomor kamar tidak boleh kosong.");
         }
         this.nomorKamar = nomorKamar.trim();
@@ -31,7 +31,7 @@ public class Kamar {
     }
 
     public void setTipeKamar(String tipeKamar) {
-        if (tipeKamar == null || tipeKamar.trim().isEmpty()) {
+        if (tipeKamar == null || tipeKamar.trim().equals("")) {
             throw new IllegalArgumentException("Tipe kamar tidak boleh kosong.");
         }
         this.tipeKamar = tipeKamar.trim();
@@ -69,8 +69,11 @@ public class Kamar {
 
     @Override
     public String toString() {
-        String status = tersedia ? "Tersedia" : "Terisi";
-        return String.format("Kamar %s [%s] | Kapasitas: %d org | Rp%.0f/malam | Status: %s",
-                nomorKamar, tipeKamar, kapasitas, hargaPerMalam, status);
+        String statusKamar = "Terisi";
+        if (tersedia) {
+            statusKamar = "Tersedia";
+        }
+        return "Kamar " + nomorKamar + " [" + tipeKamar + "] | Kapasitas: " + kapasitas
+                + " org | Rp " + (long) hargaPerMalam + "/malam | Status: " + statusKamar;
     }
 }

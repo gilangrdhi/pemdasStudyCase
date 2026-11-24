@@ -36,7 +36,7 @@ public class Main {
             } else if (pilihan.equals("7")) {
                 tampilkanSemuaReservasi();
             } else if (pilihan.equals("8")) {
-                prosesPembatalanReservasi(); // Bagian Anggota 3
+                prosesPembatalanReservasi(); // Slot khusus fitur Deposit & Pembatalan
             } else if (pilihan.equals("0")) {
                 jalan = false;
                 System.out.println("Program selesai. Terima kasih!");
@@ -143,10 +143,14 @@ public class Main {
             System.out.print("Tanggal Check-Out (YYYY-MM-DD): ");
             LocalDate checkOut = LocalDate.parse(input.nextLine());
 
+            // Memanggil pengecekan ketersediaan tanggal (Bagian Cek Tanggal)
             if (!isKamarTersediaPadaTanggal(kamar, checkIn, checkOut)) {
                 System.out.println("Reservasi ditolak: Kamar tidak tersedia pada tanggal tersebut.");
                 return;
             }
+
+            // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan]:
+            // Tambahkan input nominal deposit di sini lalu simpan ke objek reservasi
 
             String kodeRes = "RSV-" + (daftarReservasi.size() + 1);
             Reservasi reservasi = new Reservasi(kodeRes, kamar, tamu, jumlahTamu, checkIn, checkOut);
@@ -159,6 +163,10 @@ public class Main {
         }
     }
 
+    // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+    // Ubah isi method ini untuk mengecek daftarReservasi agar kamar yang sama
+    // tidak bentrok tanggalnya dengan reservasi yang statusnya masih DIPESAN atau
+    // CHECK_IN
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
         return kamar.isTersedia();
     }
@@ -200,6 +208,9 @@ public class Main {
         }
     }
 
+    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan (fitur-deposit-batal)]:
+    // Panggil method r.batalkanReservasi() dan tampilkan nominal refund deposit di
+    // sini
     static void prosesPembatalanReservasi() {
         System.out.print("Masukkan Kode Reservasi yang ingin dibatalkan: ");
         String kode = input.nextLine();
@@ -209,9 +220,10 @@ public class Main {
             System.out.println("Kode reservasi tidak ditemukan.");
             return;
         }
-        System.out.println("Fitur pembatalan sedang dikerjakan Anggota 3.");
+        System.out.println("Fitur pembatalan sedang dikerjakan.");
     }
 
+    // [Bagian Kamu - Anggota 2] Menampilkan rincian biaya & diskon lama menginap
     static void cetakRincianBiaya(Reservasi r) {
         long malam = r.hitungLamaMenginap();
         double subtotal = r.hitungSubtotalKamar();
