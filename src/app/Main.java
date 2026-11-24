@@ -64,7 +64,6 @@ public class Main {
         System.out.println("8. Batalkan Reservasi");
         System.out.println("0. Keluar");
         System.out.print("Pilih menu: ");
-        System.out.println("hai ini tes");
     }
 
     static void tambahKamar() {
@@ -160,7 +159,6 @@ public class Main {
         }
     }
 
-    // [Titik Integrasi Anggota 4 - Cek Ketersediaan Tanggal]
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
         return kamar.isTersedia();
     }
