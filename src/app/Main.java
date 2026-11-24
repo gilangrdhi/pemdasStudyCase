@@ -143,19 +143,14 @@ public class Main {
             System.out.print("Tanggal Check-Out (YYYY-MM-DD): ");
             LocalDate checkOut = LocalDate.parse(input.nextLine());
 
-            // [Bagian Meyzaffa & Fitri] Cek bentrok tanggal pada kamar yang dipilih
+            // [Bagian Fitri - Anggota 4] Memanggil pengecekan anti-bentrok tanggal
             if (!isKamarTersediaPadaTanggal(kamar, checkIn, checkOut)) {
                 System.out.println("Reservasi ditolak: Kamar sudah dipesan pada rentang tanggal tersebut.");
                 return;
             }
 
-            // [Bagian Meyzaffa & Fitri] Input nominal deposit saat reservasi
-            System.out.print("Nominal Deposit (Rp): ");
-            double deposit = Double.parseDouble(input.nextLine());
-
             String kodeRes = "RSV-" + (daftarReservasi.size() + 1);
             Reservasi reservasi = new Reservasi(kodeRes, kamar, tamu, jumlahTamu, checkIn, checkOut);
-            reservasi.setDeposit(deposit);
             daftarReservasi.add(reservasi);
 
             System.out.println("\nReservasi berhasil dibuat!");
@@ -165,8 +160,8 @@ public class Main {
         }
     }
 
-    // [Bagian Meyzaffa & Fitri] Mengecek semua reservasi aktif agar tanggal tidak
-    // bentrok
+    // [Bagian Fitri - Anggota 4] Mengecek seluruh daftarReservasi untuk kamar yang
+    // sama
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
         for (Reservasi r : daftarReservasi) {
             if (r.getKamar().getNomorKamar().equalsIgnoreCase(kamar.getNomorKamar())) {
@@ -215,7 +210,6 @@ public class Main {
         }
     }
 
-    // [Bagian Meyzaffa & Fitri] Proses pembatalan reservasi & hitung refund deposit
     static void prosesPembatalanReservasi() {
         System.out.print("Masukkan Kode Reservasi yang ingin dibatalkan: ");
         String kode = input.nextLine();
@@ -225,42 +219,18 @@ public class Main {
             System.out.println("Kode reservasi tidak ditemukan.");
             return;
         }
-
-        try {
-            System.out.print("Tanggal Pembatalan (YYYY-MM-DD): ");
-            LocalDate tglBatal = LocalDate.parse(input.nextLine());
-
-            r.batalkanReservasi(tglBatal);
-            double refund = r.hitungRefund();
-
-            System.out.println("\nReservasi " + r.getKodeReservasi() + " berhasil dibatalkan.");
-            System.out.println("Deposit Awal : Rp " + (long) r.getDeposit());
-            System.out.println("Dana Refund  : Rp " + (long) refund);
-        } catch (Exception e) {
-            System.out.println("Pembatalan gagal: " + e.getMessage());
-        }
+        System.out.println("Fitur pembatalan dikerjakan pada branch fitur-deposit-batal.");
     }
 
-    // [Bagian Anggota 1 & 2] Menampilkan rincian tarif weekend, diskon, dan deposit
     static void cetakRincianBiaya(Reservasi r) {
         long malam = r.hitungLamaMenginap();
-        long malamWeekend = r.hitungJumlahMalamWeekend();
         double subtotal = r.hitungSubtotalKamar();
         double diskon = r.hitungDiskonMenginap(subtotal);
         int persen = (int) (r.getPersentaseDiskon() * 100);
-        int persenWeekend = (int) (r.getPersentaseTarifWeekend() * 100);
-        double sisaBayar = r.getTotalBiaya() - r.getDeposit();
-        if (sisaBayar < 0) {
-            sisaBayar = 0;
-        }
 
         System.out.println("--- RINCIAN BIAYA (" + r.getKodeReservasi() + ") ---");
         System.out.println("Lama Menginap : " + malam + " malam (" + r.getTanggalCheckIn() + " s/d "
                 + r.getTanggalCheckOut() + ")");
-        if (malamWeekend > 0) {
-            System.out.println(
-                    "Tarif Weekend : Termasuk " + malamWeekend + " malam weekend (+" + persenWeekend + "%/malam)");
-        }
         System.out.println("Subtotal      : Rp " + (long) subtotal);
         if (diskon > 0) {
             System.out.println("Diskon (" + persen + "%)  : -Rp " + (long) diskon + " (Menginap >= "
@@ -269,8 +239,6 @@ public class Main {
             System.out.println("Diskon        : Rp 0");
         }
         System.out.println("Total Tagihan : Rp " + (long) r.getTotalBiaya());
-        System.out.println("Deposit       : Rp " + (long) r.getDeposit());
-        System.out.println("Sisa Bayar    : Rp " + (long) sisaBayar);
     }
 
     static void tampilkanSemuaReservasi() {
