@@ -2,6 +2,6 @@ package app;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.printf("haii -gilang");
+        System.out.printf("ini kodingan baru");
     }
 }
