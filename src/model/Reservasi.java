@@ -12,9 +12,8 @@ public class Reservasi {
     private String status;
     private double totalBiaya;
 
-    // [Bagian Anggota 2] Atribut diskon lama menginap
     private int minimalMalamDiskon = 3;
-    private double persentaseDiskon = 0.10; // 10%
+    private double persentaseDiskon = 0.10;
 
     public Reservasi(String kodeReservasi, Kamar kamar, Tamu tamu, int jumlahTamu,
             LocalDate tanggalCheckIn, LocalDate tanggalCheckOut) {
@@ -38,12 +37,9 @@ public class Reservasi {
         this.tanggalCheckIn = tanggalCheckIn;
         this.tanggalCheckOut = tanggalCheckOut;
         this.status = "DIPESAN";
-        // [Bagian Fitri - Anggota 4] Kamar tidak langsung dikunci saat DIPESAN
-        // agar tetap bisa dipesan untuk tanggal lain yang tidak bentrok
         this.totalBiaya = hitungTotalBiaya();
     }
 
-    // Menghitung jumlah malam dengan perulangan tanggal sederhana
     public long hitungLamaMenginap() {
         long jumlahMalam = 0;
         LocalDate tanggalSekarang = tanggalCheckIn;
@@ -89,8 +85,6 @@ public class Reservasi {
         hitungTotalBiaya();
     }
 
-    // [Bagian Fitri - Anggota 4] Cek apakah rentang tanggal baru bentrok dengan
-    // reservasi ini
     public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
         if (this.status.equals("DIBATALKAN") || this.status.equals("CHECK_OUT")) {
             return false;
