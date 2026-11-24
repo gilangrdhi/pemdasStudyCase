@@ -64,6 +64,7 @@ public class Main {
         System.out.println("8. Batalkan Reservasi");
         System.out.println("0. Keluar");
         System.out.print("Pilih menu: ");
+        System.out.println("hai ini tes");
     }
 
     static void tambahKamar() {
