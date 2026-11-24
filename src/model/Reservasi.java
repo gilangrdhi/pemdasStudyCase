@@ -1,5 +1,6 @@
 package model;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class Reservasi {
@@ -11,6 +12,9 @@ public class Reservasi {
     private LocalDate tanggalCheckOut;
     private String status;
     private double totalBiaya;
+
+    // [Bagian Farid - Anggota 1] Atribut kenaikan tarif akhir pekan (20%)
+    private double persentaseTarifWeekend = 0.20;
 
     // [Bagian Anggota 2] Atribut diskon lama menginap
     private int minimalMalamDiskon = 3;
@@ -56,10 +60,38 @@ public class Reservasi {
         return jumlahMalam;
     }
 
-    // TODO [Farid - Anggota 1 (fitur-tarif-weekend)]:
-    // Ubah isi method hitungSubtotalKamar() ini untuk tarif akhir pekan
+    // [Bagian Farid - Anggota 1] Menghitung jumlah malam yang jatuh di akhir pekan
+    public long hitungJumlahMalamWeekend() {
+        long malamWeekend = 0;
+        LocalDate tanggalSekarang = tanggalCheckIn;
+        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
+            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
+            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
+                malamWeekend++;
+            }
+            tanggalSekarang = tanggalSekarang.plusDays(1);
+        }
+        return malamWeekend;
+    }
+
+    // [Bagian Farid - Anggota 1] Menghitung subtotal kamar dengan tarif weekend
+    // (Jumat, Sabtu, Minggu)
     public double hitungSubtotalKamar() {
-        return hitungLamaMenginap() * kamar.getHargaPerMalam();
+        double totalSubtotal = 0;
+        LocalDate tanggalSekarang = tanggalCheckIn;
+        double hargaNormal = kamar.getHargaPerMalam();
+
+        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
+            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
+            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
+                double hargaWeekend = hargaNormal + (hargaNormal * persentaseTarifWeekend);
+                totalSubtotal = totalSubtotal + hargaWeekend;
+            } else {
+                totalSubtotal = totalSubtotal + hargaNormal;
+            }
+            tanggalSekarang = tanggalSekarang.plusDays(1);
+        }
+        return totalSubtotal;
     }
 
     // [Bagian Anggota 2] Menghitung nominal potongan diskon menginap
@@ -111,7 +143,6 @@ public class Reservasi {
         if (!this.status.equals("DIBATALKAN")) {
             throw new IllegalStateException("Refund hanya bisa dihitung untuk reservasi yang dibatalkan.");
         }
-        // Batal minimal H-3 check-in: refund 100%, kurang dari H-3: refund 50%
         if (!tanggalBatal.isAfter(tanggalCheckIn.minusDays(3))) {
             return deposit;
         }
@@ -125,6 +156,17 @@ public class Reservasi {
             return false;
         }
         return masukBaru.isBefore(tanggalCheckOut) && keluarBaru.isAfter(tanggalCheckIn);
+    }
+
+    public double getPersentaseTarifWeekend() {
+        return persentaseTarifWeekend;
+    }
+
+    public void setPersentaseTarifWeekend(double persentaseTarifWeekend) {
+        if (persentaseTarifWeekend < 0) {
+            throw new IllegalArgumentException("Persentase tarif weekend tidak boleh negatif.");
+        }
+        this.persentaseTarifWeekend = persentaseTarifWeekend;
     }
 
     public double getDeposit() {
