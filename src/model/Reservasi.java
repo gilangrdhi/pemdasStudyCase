@@ -1,6 +1,5 @@
 package model;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class Reservasi {
@@ -13,16 +12,9 @@ public class Reservasi {
     private String status;
     private double totalBiaya;
 
-    // [Bagian Farid - Anggota 1] Atribut kenaikan tarif akhir pekan (20%)
-    private double persentaseTarifWeekend = 0.20;
-
     // [Bagian Anggota 2] Atribut diskon lama menginap
     private int minimalMalamDiskon = 3;
     private double persentaseDiskon = 0.10; // 10%
-
-    // [Bagian Meyzaffa & Fitri] Atribut deposit & tanggal pembatalan
-    private double deposit;
-    private LocalDate tanggalBatal;
 
     public Reservasi(String kodeReservasi, Kamar kamar, Tamu tamu, int jumlahTamu,
             LocalDate tanggalCheckIn, LocalDate tanggalCheckOut) {
@@ -46,6 +38,8 @@ public class Reservasi {
         this.tanggalCheckIn = tanggalCheckIn;
         this.tanggalCheckOut = tanggalCheckOut;
         this.status = "DIPESAN";
+        // [Bagian Fitri - Anggota 4] Kamar tidak langsung dikunci saat DIPESAN
+        // agar tetap bisa dipesan untuk tanggal lain yang tidak bentrok
         this.totalBiaya = hitungTotalBiaya();
     }
 
@@ -60,41 +54,10 @@ public class Reservasi {
         return jumlahMalam;
     }
 
-    // [Bagian Farid - Anggota 1] Menghitung jumlah malam yang jatuh di akhir pekan
-    public long hitungJumlahMalamWeekend() {
-        long malamWeekend = 0;
-        LocalDate tanggalSekarang = tanggalCheckIn;
-        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
-            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
-            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
-                malamWeekend++;
-            }
-            tanggalSekarang = tanggalSekarang.plusDays(1);
-        }
-        return malamWeekend;
-    }
-
-    // [Bagian Farid - Anggota 1] Menghitung subtotal kamar dengan tarif weekend
-    // (Jumat, Sabtu, Minggu)
     public double hitungSubtotalKamar() {
-        double totalSubtotal = 0;
-        LocalDate tanggalSekarang = tanggalCheckIn;
-        double hargaNormal = kamar.getHargaPerMalam();
-
-        while (tanggalSekarang.isBefore(tanggalCheckOut)) {
-            DayOfWeek hari = tanggalSekarang.getDayOfWeek();
-            if (hari == DayOfWeek.FRIDAY || hari == DayOfWeek.SATURDAY || hari == DayOfWeek.SUNDAY) {
-                double hargaWeekend = hargaNormal + (hargaNormal * persentaseTarifWeekend);
-                totalSubtotal = totalSubtotal + hargaWeekend;
-            } else {
-                totalSubtotal = totalSubtotal + hargaNormal;
-            }
-            tanggalSekarang = tanggalSekarang.plusDays(1);
-        }
-        return totalSubtotal;
+        return hitungLamaMenginap() * kamar.getHargaPerMalam();
     }
 
-    // [Bagian Anggota 2] Menghitung nominal potongan diskon menginap
     public double hitungDiskonMenginap(double subtotal) {
         if (hitungLamaMenginap() >= minimalMalamDiskon) {
             return subtotal * persentaseDiskon;
@@ -126,62 +89,16 @@ public class Reservasi {
         hitungTotalBiaya();
     }
 
-    // [Bagian Meyzaffa & Fitri] Pembatalan reservasi & perhitungan refund deposit
-    public void batalkanReservasi(LocalDate tanggalPembatalan) {
-        if (!this.status.equals("DIPESAN")) {
-            throw new IllegalStateException("Pembatalan gagal. Status reservasi saat ini: " + this.status);
-        }
-        if (tanggalPembatalan == null) {
-            throw new IllegalArgumentException("Tanggal pembatalan tidak boleh kosong.");
-        }
-        this.status = "DIBATALKAN";
-        this.tanggalBatal = tanggalPembatalan;
-        this.kamar.setTersedia(true);
-    }
-
-    public double hitungRefund() {
-        if (!this.status.equals("DIBATALKAN")) {
-            throw new IllegalStateException("Refund hanya bisa dihitung untuk reservasi yang dibatalkan.");
-        }
-        if (!tanggalBatal.isAfter(tanggalCheckIn.minusDays(3))) {
-            return deposit;
-        }
-        return deposit * 0.5;
-    }
-
-    // [Bagian Meyzaffa & Fitri] Cek apakah rentang tanggal baru bentrok dengan
+    // [Bagian Fitri - Anggota 4] Cek apakah rentang tanggal baru bentrok dengan
     // reservasi ini
     public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
         if (this.status.equals("DIBATALKAN") || this.status.equals("CHECK_OUT")) {
             return false;
         }
-        return masukBaru.isBefore(tanggalCheckOut) && keluarBaru.isAfter(tanggalCheckIn);
-    }
-
-    public double getPersentaseTarifWeekend() {
-        return persentaseTarifWeekend;
-    }
-
-    public void setPersentaseTarifWeekend(double persentaseTarifWeekend) {
-        if (persentaseTarifWeekend < 0) {
-            throw new IllegalArgumentException("Persentase tarif weekend tidak boleh negatif.");
+        if (masukBaru.isBefore(tanggalCheckOut) && keluarBaru.isAfter(tanggalCheckIn)) {
+            return true;
         }
-        this.persentaseTarifWeekend = persentaseTarifWeekend;
-    }
-
-    public double getDeposit() {
-        return deposit;
-    }
-
-    public void setDeposit(double deposit) {
-        if (deposit < 0) {
-            throw new IllegalArgumentException("Deposit tidak boleh negatif.");
-        }
-        this.deposit = deposit;
-    }
-
-    public LocalDate getTanggalBatal() {
-        return tanggalBatal;
+        return false;
     }
 
     public int getMinimalMalamDiskon() {
@@ -246,7 +163,6 @@ public class Reservasi {
                 + " | Kamar: " + kamar.getNomorKamar()
                 + " | " + tanggalCheckIn + " s/d " + tanggalCheckOut
                 + " (" + hitungLamaMenginap() + " malam)"
-                + " | Deposit: Rp " + (long) deposit
                 + " | Diskon: Rp " + (long) diskon
                 + " | Status: " + status
                 + " | Total: Rp " + (long) hitungTotalBiaya();
