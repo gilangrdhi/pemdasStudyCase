@@ -16,7 +16,8 @@ public class Reservasi {
     private int minimalMalamDiskon = 3;
     private double persentaseDiskon = 0.10; // 10%
 
-    // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan]:
+    private double deposit;
+    private LocalDate tanggalBatal;
     // Tambahkan atribut: private double deposit; beserta getter & setter-nya di
     // bawah
 
@@ -106,12 +107,45 @@ public class Reservasi {
     }
 
     // TODO [Meyzaffa / Fitri - Fitur Deposit & Pembatalan (fitur-deposit-batal)]:
+    public void batalkanReservasi(LocalDate tanggalPembatalan) {
+        if (!this.status.equals("DIPESAN")) {
+            throw new IllegalStateException("Pembatalan gagal. Status reservasi saat ini: " + this.status);
+        }
+        this.status = "DIBATALKAN";
+        this.tanggalBatal = tanggalPembatalan;
+        this.kamar.setTersedia(true);
+    }
+
+    public double hitungRefund() {
+        if (!this.status.equals("DIBATALKAN")) {
+            throw new IllegalStateException("Refund hanya bisa dihitung untuk reservasi yang dibatalkan.");
+        }
+        if (!tanggalBatal.isAfter(tanggalCheckIn.minusDays(3))) {
+            return deposit;
+        }
+        return deposit * 0.5;
+    }
     // Buat method batalkanReservasi() dan hitungRefund() di sini
 
     // TODO [Meyzaffa / Fitri - Fitur Cek Bentrok Tanggal (fitur-cek-tanggal)]:
+    public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
+        if (this.status.equals("DIBATALKAN")) {
+            return false;
+        }
+        return masukBaru.isBefore(tanggalCheckOut) && keluarBaru.isAfter(tanggalCheckIn);
+    }
     // Buat method isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) di
     // sini
+    public double getDeposit() {
+        return deposit;
+    }
 
+    public void setDeposit(double deposit) {
+        if (deposit < 0) {
+            throw new IllegalArgumentException("Deposit tidak boleh negatif.");
+        }
+        this.deposit = deposit;
+    }
     public int getMinimalMalamDiskon() {
         return minimalMalamDiskon;
     }
