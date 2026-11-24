@@ -241,12 +241,14 @@ public class Main {
         }
     }
 
-    // [Bagian Anggota 2] Menampilkan rincian biaya, diskon, dan deposit
+    // [Bagian Anggota 1 & 2] Menampilkan rincian tarif weekend, diskon, dan deposit
     static void cetakRincianBiaya(Reservasi r) {
         long malam = r.hitungLamaMenginap();
+        long malamWeekend = r.hitungJumlahMalamWeekend();
         double subtotal = r.hitungSubtotalKamar();
         double diskon = r.hitungDiskonMenginap(subtotal);
         int persen = (int) (r.getPersentaseDiskon() * 100);
+        int persenWeekend = (int) (r.getPersentaseTarifWeekend() * 100);
         double sisaBayar = r.getTotalBiaya() - r.getDeposit();
         if (sisaBayar < 0) {
             sisaBayar = 0;
@@ -255,6 +257,10 @@ public class Main {
         System.out.println("--- RINCIAN BIAYA (" + r.getKodeReservasi() + ") ---");
         System.out.println("Lama Menginap : " + malam + " malam (" + r.getTanggalCheckIn() + " s/d "
                 + r.getTanggalCheckOut() + ")");
+        if (malamWeekend > 0) {
+            System.out.println(
+                    "Tarif Weekend : Termasuk " + malamWeekend + " malam weekend (+" + persenWeekend + "%/malam)");
+        }
         System.out.println("Subtotal      : Rp " + (long) subtotal);
         if (diskon > 0) {
             System.out.println("Diskon (" + persen + "%)  : -Rp " + (long) diskon + " (Menginap >= "
