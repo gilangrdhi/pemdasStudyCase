@@ -16,7 +16,7 @@ public class Reservasi {
     private double persentaseTarifWeekend = 0.20;
 
     private int minimalMalamDiskon = 3;
-    private double persentaseDiskon = 0.10;
+    private final double persentaseDiskon = 0.10;
 
     private double deposit;
     private LocalDate tanggalBatal;
@@ -189,13 +189,6 @@ public class Reservasi {
 
     public double getPersentaseDiskon() {
         return persentaseDiskon;
-    }
-
-    public void setPersentaseDiskon(double persentaseDiskon) {
-        if (persentaseDiskon < 0 || persentaseDiskon > 1) {
-            throw new IllegalArgumentException("Persentase diskon harus antara 0.0 hingga 1.0.");
-        }
-        this.persentaseDiskon = persentaseDiskon;
     }
 
     public String getKodeReservasi() {
