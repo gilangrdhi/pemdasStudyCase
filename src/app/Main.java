@@ -143,10 +143,12 @@ public class Main {
             System.out.print("Tanggal Check-Out (YYYY-MM-DD): ");
             LocalDate checkOut = LocalDate.parse(input.nextLine());
 
+            //zaffa
             if (!isKamarTersediaPadaTanggal(kamar, checkIn, checkOut)) {
                 System.out.println("Reservasi ditolak: Kamar sudah dipesan pada rentang tanggal tersebut.");
                 return;
             }
+            //end zaffa
 
             System.out.print("Nominal Deposit (Rp): ");
             double deposit = Double.parseDouble(input.nextLine());
@@ -163,6 +165,7 @@ public class Main {
         }
     }
 
+    //zaffa
     static boolean isKamarTersediaPadaTanggal(Kamar kamar, LocalDate checkIn, LocalDate checkOut) {
         for (Reservasi r : daftarReservasi) {
             if (r.getKamar().getNomorKamar().equalsIgnoreCase(kamar.getNomorKamar())) {
@@ -173,7 +176,8 @@ public class Main {
         }
         return true;
     }
-
+    //end zaffa
+    
     static void prosesCheckIn() {
         System.out.print("Masukkan Kode Reservasi (contoh: RSV-1): ");
         String kode = input.nextLine();

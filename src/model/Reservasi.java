@@ -140,6 +140,7 @@ public class Reservasi {
         return deposit * 0.5;
     }
 
+    //zaffa
     public boolean isTanggalBentrok(LocalDate masukBaru, LocalDate keluarBaru) {
         if (this.status.equals("DIBATALKAN") || this.status.equals("CHECK_OUT")) {
             return false;
@@ -149,6 +150,7 @@ public class Reservasi {
         }
         return false;
     }
+    //end zaffa
 
     public double getPersentaseTarifWeekend() {
         return persentaseTarifWeekend;
